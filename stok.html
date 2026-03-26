@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stok</title>
+</head>
+<body>
+
+
+<div class="navbar">
+  <button onclick="history.back()">⬅️ Kembali</button>
+  <button onclick="location.href='index.html'">🏠 Menu</button>
+</div>
+
+<h3>📊 Stok Barang</h3>
+<div id="list"></div>
+
+<script src="js/app.js">
+fetch("https://script.google.com/macros/s/AKfycbwXR9q2IgLzysjgRCYSr1-FpSbOVRF-_hW0xwb6NPE3hSZ-RHI_-WFTcalB6ApwK8zZXw/exec")
+.then(r=>r.json())
+.then(res=>{
+  let html="";
+  res.forEach(x=>{
+    html+=`<div>${x.barang} : ${x.stok}</div>`;
+  });
+  list.innerHTML=html;
+});
+</script>
+
+</body>
+</html>
+
