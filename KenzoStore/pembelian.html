@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penjualan</title>
+</head>
+<body>
+
+
+<div class="navbar">
+  <button onclick="history.back()">⬅️ Kembali</button>
+  <button onclick="location.href='index.html'">🏠 Menu</button>
+</div>
+
+<h3>💰 Pembelian</h3>
+
+<input id="barang" placeholder="Nama Barang" onkeyup="autoIsiBarang()">
+<div id="suggestions"></div>
+
+<input id="qty" type="number" value="1">
+<input id="harga" placeholder="Harga">
+
+<button onclick="tambah()">Tambah</button>
+
+<div id="cart"></div>
+
+<script src="js/app.js">
+let data = [];
+let hasil = [];
+
+function autoIsiBarang() {
+  const val = barang.value;
+
+  fetch("https://script.google.com/macros/s/AKfycbwXR9q2IgLzysjgRCYSr1-FpSbOVRF-_hW0xwb6NPE3hSZ-RHI_-WFTcalB6ApwK8zZXw/exec?type=barang&keyword="+val)
+  .then(r=>r.json())
+  .then(res=>{
+    hasil = res;
+    let html="";
+    res.forEach((x,i)=>{
+      html += `<div onclick="pilih(${i})">${x.barang}</div>`;
+    });
+    suggestions.innerHTML = html;
+  });
+}
+
+function pilih(i){
+  barang.value = hasil[i].barang;
+  harga.value = hasil[i].harga;
+  suggestions.innerHTML="";
+}
+
+function tambah(){
+  const qtyVal = Number(qty.value);
+  const hargaVal = Number(harga.value);
+
+  data.push({
+    mode:"beli",
+    barang:barang.value,
+    qty:qtyVal,
+    harga:hargaVal,
+    subtotal:qtyVal*hargaVal,
+    status:"lunas"
+  });
+
+  render();
+}
+
+function render(){
+  cart.innerHTML="";
+  let total=0;
+
+  data.forEach(x=>{
+    total+=x.subtotal;
+    cart.innerHTML+=`
+    <div>
+      ${x.qty} ${x.barang} x ${x.harga} = ${x.subtotal}
+    </div>`;
+  });
+
+  cart.innerHTML+=`<b>Total ${total}</b>`;
+}
+</script>
+
+</body>
+</html>
